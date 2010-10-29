@@ -104,21 +104,34 @@ class MAService(Service):
                     response=(RESPONSE_SURFACE, RESPONSE_READING, RESPONSE_POS),
                     filter=None,
                     json=False):
-        return self.get_result_set(sentence=sentence,
-                                 response=response,
-                                 filter=filter,
-                                 json=json).ma_result
+        if json:
+            return self.get_result_set(sentence=sentence,
+                                    response=response,
+                                    filter=filter,
+                                    json=json)
+        else:
+            return self.get_result_set(sentence=sentence,
+                                    response=response,
+                                    filter=filter,
+                                    json=json).ma_result
     
     def get_uniq_result(self,
                       sentence,
                       response=(RESPONSE_SURFACE, RESPONSE_READING, RESPONSE_POS),
                       filter=None,
                       json=False):
-        return self.get_result_set(sentence=sentence,
-                                 results=[RESULT_UNIQ],
-                                 response=response,
-                                 filter=filter,
-                                 json=json).uniq_result
+        if json:
+            return self.get_result_set(sentence=sentence,
+                                    results=[RESULT_UNIQ],
+                                    response=response,
+                                    filter=filter,
+                                    json=json)
+        else:
+            return self.get_result_set(sentence=sentence,
+                                    results=[RESULT_UNIQ],
+                                    response=response,
+                                    filter=filter,
+                                    json=json).uniq_result
 
 
 class ResultSet(BaseObject):

@@ -31,7 +31,7 @@ class Service(object):
     
     def _setParam(self, params, param, name, split):
         if param is not None:
-            params[name] = split.join(param)
+            params[name] = split.join(map(param))
     
     def _getDOM(self, params):
         return minidom.parseString(self._removeNewLine(self._response(params)))

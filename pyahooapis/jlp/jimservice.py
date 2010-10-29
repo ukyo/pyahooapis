@@ -28,7 +28,7 @@ class JIMService(Service):
     def __init__(self, appid):
         Service.__init__(self, appid, 'http://jlp.yahooapis.jp/JIMService/V1/conversion')
     
-    def getSegmentList(self,
+    def get_segments(self,
                        sentence,
                        format=None,
                        mode=MODE_NORMAL,

@@ -6,7 +6,7 @@ class KouseiService(Service):
     def __init__(self, appid):
         Service.__init__(self, appid, "http://jlp.yahooapis.jp/KouseiService/V1/kousei")
         
-    def getResults(self,
+    def get_results(self,
                    sentence,
                    filter_group=(1,2,3),
                    no_filter=None,
