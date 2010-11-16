@@ -97,7 +97,7 @@ class MAService(Service):
         if results.count(RESULT_UNIQ) > 0:
             resultset.uniq_result = self._get_result(results, 'uniq_result', dom)
         
-        return self.parseJSON(resultset) if json else resultset
+        return self.py2json(resultset) if json else resultset
     
     def get_ma_result(self,
                     sentence,

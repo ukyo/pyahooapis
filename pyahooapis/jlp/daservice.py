@@ -51,7 +51,7 @@ class DAService(Service):
                                    int(self._getText(c, 'Dependency')),
                                    morphems))
         
-        return self.parseJSON(chunks) if json else chunks
+        return self.py2json(chunks) if json else chunks
 
 
 class Chunk(BaseObject):

@@ -54,7 +54,7 @@ class KeyphraseService(Service):
                           for r in dom.getElementsByTagName("Result")
                           ]
             
-            return self.parseJSON(resultlist) if json == JSON_LIBRALY else resultlist
+            return self.py2json(resultlist) if json == JSON_LIBRALY else resultlist
 
 class KeyphraseResult(BaseObject):
     def __init__(self, keyphrase, score):

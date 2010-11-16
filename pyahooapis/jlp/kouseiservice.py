@@ -27,7 +27,7 @@ class KouseiService(Service):
                              self._getText(r, 'ShitekiInfo'))
                       for r in dom.getElementsByTagName('Result')]
         
-        return self.parseJSON(resultlist) if json else resultlist  
+        return self.py2json(resultlist) if json else resultlist  
         
         
 class Result(BaseObject):

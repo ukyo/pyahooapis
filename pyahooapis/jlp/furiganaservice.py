@@ -40,7 +40,7 @@ class FuriganaService(Service):
                                    for sw in w.getElementsByTagName('SubWord')
                                   ]))
         
-        return self.parseJSON(words) if json else words
+        return self.py2json(words) if json else words
     
 
 class Word(BaseObject):

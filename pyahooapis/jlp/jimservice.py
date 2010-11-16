@@ -57,7 +57,7 @@ class JIMService(Service):
                                [c.firstChild.nodeValue for c in s.getElementsByTagName('Candidate')])
                        for s in dom.getElementsByTagName('Segment')]
         
-        return self.parseJSON(segmentlist) if json else segmentlist
+        return self.py2json(segmentlist) if json else segmentlist
 
 
 class Segment(BaseObject):
