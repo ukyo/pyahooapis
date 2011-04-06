@@ -69,7 +69,7 @@ class Chunk(BaseObject):
         self.morphems = morphems
     
     def __str__(self):
-        return ''.join(str(morphem) for morphem in self.morphems)
+        return ''.join(morphem.surface for morphem in self.morphems).encode('utf8')
 
 
 class Morphem(BaseObject):

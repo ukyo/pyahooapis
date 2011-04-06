@@ -56,7 +56,7 @@ class Word(BaseObject):
         self.subwords = subwords
     
     def __str__(self):
-        return self.surface
+        return self.surface.encode('utf8')
 
 
 class SubWord(BaseObject):
@@ -70,5 +70,5 @@ class SubWord(BaseObject):
         self.roman = roman
     
     def __str__(self):
-        return self.surface
+        return self.surface.encode('utf8')
     

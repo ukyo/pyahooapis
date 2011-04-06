@@ -79,6 +79,6 @@ class Segment(BaseObject):
         self.candidate_list = candidate_list
     
     def __str__(self):
-        return self.segment_text
+        return self.segment_text.encode('utf8')
 
 

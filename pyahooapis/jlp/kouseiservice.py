@@ -45,4 +45,4 @@ class Result(BaseObject):
         self.shiteki_info = shiteki_info
         
     def __str__(self):
-        return self.surface
+        return self.surface.encode('utf8')

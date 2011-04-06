@@ -38,7 +38,10 @@ class Service(object):
         
     def _removeNewLine(self, xml):
         return newline_sub('', xml)
-   
+    
+    def _binary2list(self, binary, dct):
+        return [dct[key] for key in iter(dct) if binary & key]
+    
     def py2json(self, obj):
         def _py2json(_obj):
             if isinstance(_obj, list):
@@ -48,7 +51,7 @@ class Service(object):
                 return dict((p, _py2json(getattr(_obj, p))) for p in propertys)
             else:
                 return _obj
-        return json.dumps(_py2json(obj), indent=True)
+        return json.dumps(_py2json(obj), indent=False)
                 
 class BaseObject(object):
     pass

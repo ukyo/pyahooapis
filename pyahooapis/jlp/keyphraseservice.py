@@ -62,5 +62,5 @@ class KeyphraseResult(BaseObject):
         self.score = score
 
     def __str__(self):
-        return self.keyphrase
+        return self.keyphrase.encode('utf8')
 
