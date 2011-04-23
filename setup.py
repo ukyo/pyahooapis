@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1.1'
+version = '0.2.0'
 
 setup(name='pyahooapis',
       version=version,
-      description="Yahoo!Japn Text APIs Python wrapper",
+      description="Yahoo! Japan Text APIs Python wrapper",
       long_description="""\
 """,
       classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -13,7 +13,7 @@ setup(name='pyahooapis',
       author='ukyo',
       author_email='ukyo.web@gmail.com',
       url='http://hujimi.seesaa.net',
-      license='MIT',
+      license='Apache License 2.0',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,

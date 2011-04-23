@@ -2,6 +2,7 @@
 
 import re
 import urllib
+import urllib2
 from xml.dom import minidom
 
 import utils
@@ -18,30 +19,31 @@ class Service(object):
         self.appid = appid
         self.url = url
 
-    def _getText(self, node, tagName):
+    def get_text(self, node, tagName):
         try:
             return node.getElementsByTagName(tagName)[0].firstChild.nodeValue
         except:
             return None
     
     def _response(self, params):
-        encParams = urllib.urlencode([(k, v) for k, v in params.iteritems()])
-        f = urllib.urlopen(self.url + '?appid=' + self.appid + '&' + encParams)
-        return f.read()
-    
+        return urllib2.urlopen(self.url, data='appid=%s&%s' % (self.appid, urllib.urlencode(params))).read()
+        
     def _setParam(self, params, param, name, split):
         if param is not None:
             params[name] = split.join(map(str, param))
     
-    def _getDOM(self, params):
-        return minidom.parseString(self._removeNewLine(self._response(params)))
+    def get_dom(self, params):
+        return minidom.parseString(self._remove_newline(self._response(params)))
         
-    def _removeNewLine(self, xml):
+    def _remove_newline(self, xml):
         return newline_sub('', xml)
     
     def _binary2list(self, binary, dct):
         return [dct[key] for key in iter(dct) if binary & key]
     
+    def binary2param(self, split, binary, dct):
+        return split.join(map(str, self._binary2list(binary, dct)))
+        
     def py2json(self, obj):
         def _py2json(_obj):
             if isinstance(_obj, list):

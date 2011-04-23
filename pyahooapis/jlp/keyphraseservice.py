@@ -42,15 +42,15 @@ class KeyphraseService(Service):
         
         params["sentence"] = sentence
         
-        if json == JSON_ORIGINAL:
+        if json and json != JSON_LIBRALY:
             params["output"] = JSON_ORIGINAL
             return self._response(params)
         else:
             params["output"] = "xml"
-            dom = self._getDOM(params)
+            dom = self.get_dom(params)
             resultlist = [
-                          KeyphraseResult(self._getText(r, "Keyphrase"),
-                                 self._getText(r, "Score"))
+                          KeyphraseResult(self.get_text(r, "Keyphrase"),
+                                 self.get_text(r, "Score"))
                           for r in dom.getElementsByTagName("Result")
                           ]
             

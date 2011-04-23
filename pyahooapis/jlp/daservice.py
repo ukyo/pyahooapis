@@ -34,21 +34,21 @@ class DAService(Service):
         '''
         
         params = {'sentence' : sentence}
-        dom = self._getDOM(params)
+        dom = self.get_dom(params)
         
         chunks = []
         
         for c in dom.getElementsByTagName('Chunk'):
             morphems = [
-                Morphem(self._getText(m, 'Surface'),
-                        self._getText(m, 'Reading'),
-                        self._getText(m, 'Baseform'),
-                        self._getText(m, 'POS'),
-                        self._getText(m, 'Feature'))
+                Morphem(self.get_text(m, 'Surface'),
+                        self.get_text(m, 'Reading'),
+                        self.get_text(m, 'Baseform'),
+                        self.get_text(m, 'POS'),
+                        self.get_text(m, 'Feature'))
                 for m in c.getElementsByTagName('Morphem')
             ]
-            chunks.append(Chunk(int(self._getText(c, 'Id')),
-                                   int(self._getText(c, 'Dependency')),
+            chunks.append(Chunk(int(self.get_text(c, 'Id')),
+                                   int(self.get_text(c, 'Dependency')),
                                    morphems))
         
         return self.py2json(chunks) if json else chunks

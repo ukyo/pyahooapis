@@ -1,27 +1,39 @@
+#coding: utf-8
 from pyahooapis.service import Service, BaseObject
 
-
 FORMAT_ROMAN = 'roman'
-
 
 MODE_NORMAL = 'normal'
 MODE_ROMAN = 'roman'
 MODE_PREDICTIVE = 'predictive'
 
+RESPONSE_KATAKANA = 1
+RESPONSE_HIRAGANA = 2
+RESPONSE_ALPHANUMERIC = 4
+RESPONSE_HALF_KATAKANA = 8
+RESPONSE_HALF_ALPHANUMERIC = 16
 
-RESPONSE_KATAKANA = 'katakana'
-RESPONSE_HIRAGANA = 'hiragana'
-RESPONSE_ALPHANUMERIC = 'alphanumeric'
-RESPONSE_HALF_KATAKANA = 'half_katakana'
-RESPONSE_HALF_ALPHANUMERIC = 'half_alphanumeric'
+RESPONSES = {
+    RESPONSE_KATAKANA : 'katakana',
+    RESPONSE_HIRAGANA : 'hiragana',
+    RESPONSE_ALPHANUMERIC : 'alphanumeric',
+    RESPONSE_HALF_KATAKANA : 'half_katakana',
+    RESPONSE_HALF_ALPHANUMERIC : 'half_alphanumeric',
+    }
 
+DICTIONARY_DEFAULT = 1
+DICTIONARY_NAME = 2
+DICTIONARY_PLACE = 4
+DICTIONARY_ZIP = 8
+DICTIONARY_SYMBOL = 16
 
-DICTIONARY_DEFAULT = 'default'
-DICTIONARY_NAME = 'name'
-DICTIONARY_PLACE = 'place'
-DICTIONARY_ZIP = 'zip'
-DICTIONARY_SYMBOL = 'symbol'
-
+DICTIONARIES = {
+    DICTIONARY_DEFAULT : 'default',
+    DICTIONARY_NAME : 'name',
+    DICTIONARY_PLACE : 'place',
+    DICTIONARY_ZIP : 'zip',
+    DICTIONARY_SYMBOL : 'symbol',
+    }
 
 class JIMService(Service):
     
@@ -31,29 +43,34 @@ class JIMService(Service):
     def get_segments(self,
                        sentence,
                        format=None,
-                       mode=MODE_NORMAL,
+                       mode=None,
                        response=None,
-                       dictionary=[DICTIONARY_DEFAULT],
+                       dictionary=None,
                        results=999,
                        json=False):
         
         params = {}
         params['sentence'] = sentence
-        self._setParam(params, format, 'format', '')
-        params['mode'] = mode
-        self._setParam(params, response, 'response', ',')
-        self._setParam(params, dictionary, 'dictionary', ',')
-        params['results'] = str(results)
+        if format is not None:
+            params['format'] = format
+        if mode is not None:
+            params['mode'] = mode
+        if response is not None:
+            params['response'] = self.binary2param(',', response, RESPONSES)
+        if dictionary is not None:
+            params['dictionary'] = self.binary2param(',', dictionary, DICTIONARIES)
+        if results is not None:
+            params['results'] = str(results)
         
-        dom = self._getDOM(params)
+        dom = self.get_dom(params)
         
         segmentlist = [
-                       Segment(self._getText(s, 'SegmentText'),
-                               self._getText(s, 'Alphanumeric'),
-                               self._getText(s, 'HalfAlphanumeric'),
-                               self._getText(s, 'Katakana'),
-                               self._getText(s, 'HalfKatakana'),
-                               self._getText(s, 'Hiragana'),
+                       Segment(self.get_text(s, 'SegmentText'),
+                               self.get_text(s, 'Alphanumeric'),
+                               self.get_text(s, 'HalfAlphanumeric'),
+                               self.get_text(s, 'Katakana'),
+                               self.get_text(s, 'HalfKatakana'),
+                               self.get_text(s, 'Hiragana'),
                                [c.firstChild.nodeValue for c in s.getElementsByTagName('Candidate')])
                        for s in dom.getElementsByTagName('Segment')]
         

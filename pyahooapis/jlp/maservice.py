@@ -62,20 +62,20 @@ class MAService(Service):
     
     def _get_result(self, results, kind, dom):
         r = dom.getElementsByTagName(kind)[0]
-        return Result(self._getText(r, 'total_count'),
-                      self._getText(r, 'filtered_count'),
-                      [Word(self._getText(w, 'surface'),
-                            self._getText(w, 'reading'),
-                            self._getText(w, 'pos'),
-                            self._getText(w, 'baseform'),
-                            self._getText(w, 'feature'),
-                            self._getText(w, 'count'))
+        return Result(self.get_text(r, 'total_count'),
+                      self.get_text(r, 'filtered_count'),
+                      [Word(self.get_text(w, 'surface'),
+                            self.get_text(w, 'reading'),
+                            self.get_text(w, 'pos'),
+                            self.get_text(w, 'baseform'),
+                            self.get_text(w, 'feature'),
+                            self.get_text(w, 'count'))
                        for w in r.getElementsByTagName('word')])
         
     def get_result_set(self,
                      sentence,
                      results=RESULT_MA,
-                     response=RESPONSE_SURFACE|RESPONSE_READING|RESPONSE_POS,
+                     response=None,
                      filter=None,
                      ma_response=None,
                      ma_filter=None,
@@ -104,16 +104,24 @@ class MAService(Service):
         params = {}
         
         params['sentence'] = sentence
-        params['results'] = ','.join(results)
-        params['response'] = ','.join(response)
-        self._setParam(params, self._binary2list(filter, FILTERS), 'filter', '|')
-        self._setParam(params, self._binary2list(ma_response, RESPONSES), 'ma_response', ',')
-        self._setParam(params, self._binary2list(ma_filter, FILTERS), 'ma_filter', '|')
-        self._setParam(params, self._binary2list(uniq_response, RESPONSES), 'uniq_response', ',')
-        self._setParam(params, self._binary2list(uniq_response, FILTERS), 'uniq_filter', '|')
-        params['uniq_by_baseform'] = str(uniq_by_baseform).lower()
+        if results is not None:
+            params['results'] = self.binary2param(',', results, RESULTS)
+        if response is not None:
+            params['response'] = self.binary2param(',', response, RESPONSES)
+        if filter is not None:
+            params['filter'] = self.binary2param('|', filter, FILTERS)
+        if ma_response is not None:
+            params['ma_response'] = self.binary2param(',', ma_response, RESPONSES)
+        if ma_filter is not None:
+            params['ma_filter'] = self.binary2param('|', ma_filter, FILTERS)
+        if uniq_response is not None:
+            params['uniq_response'] = self.binary2param(',', uniq_response, RESPONSES)
+        if uniq_filter is not None:
+            params['uniq_filter'] = self.binary2param('|', uniq_response, FILTERS)
+        if uniq_by_baseform is not False:
+            params['uniq_by_baseform'] = str(uniq_by_baseform).lower()
         
-        dom = self._getDOM(params)
+        dom = self.get_dom(params)
         
         resultset = ResultSet()
         
@@ -127,37 +135,23 @@ class MAService(Service):
     
     def get_ma_result(self,
                     sentence,
-                    response=RESPONSE_SURFACE|RESPONSE_READING|RESPONSE_POS,
+                    response=None,
                     filter=None,
                     json=False):
         if json:
-            return self.get_result_set(sentence=sentence,
-                                    response=response,
-                                    filter=filter,
-                                    json=json)
+            return self.get_result_set(sentence=sentence, response=response, filter=filter, json=json)
         else:
-            return self.get_result_set(sentence=sentence,
-                                    response=response,
-                                    filter=filter,
-                                    json=json).ma_result
+            return self.get_result_set(sentence=sentence, response=response, filter=filter, json=json).ma_result
     
     def get_uniq_result(self,
                       sentence,
-                      response=RESPONSE_SURFACE|RESPONSE_READING|RESPONSE_POS,
+                      response=None,
                       filter=None,
                       json=False):
         if json:
-            return self.get_result_set(sentence=sentence,
-                                    results=RESULT_UNIQ,
-                                    response=response,
-                                    filter=filter,
-                                    json=json)
+            return self.get_result_set(sentence=sentence, results=RESULT_UNIQ, response=response, filter=filter, json=json)
         else:
-            return self.get_result_set(sentence=sentence,
-                                    results=RESULT_UNIQ,
-                                    response=response,
-                                    filter=filter,
-                                    json=json).uniq_result
+            return self.get_result_set(sentence=sentence, results=RESULT_UNIQ, response=response, filter=filter, json=json).uniq_result
 
 
 class ResultSet(BaseObject):
