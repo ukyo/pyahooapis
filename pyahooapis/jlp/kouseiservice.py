@@ -1,5 +1,5 @@
 #coding: utf-8
-#coding: urf-8
+
 from pyahooapis.service import Service, BaseObject
 
 FILTER_GROUP_MISS = 1
@@ -60,17 +60,17 @@ class KouseiService(Service):
         
         params['sentence'] = sentence
         if filter_group is not None:
-            params['filter_group'] = self.binary2param(',', filter_group, FILTER_GROUPS)
+            params['filter_group'] = self._binary2param(',', filter_group, FILTER_GROUPS)
         if no_filter is not None:
-            params['no_filter'] = self.binary2param(',', no_filter, NO_FILTERS)
+            params['no_filter'] = self._binary2param(',', no_filter, NO_FILTERS)
         
-        dom = self.get_dom(params)
+        dom = self._get_dom(params)
         results = [
-                      Result(self.get_text(r, 'StartPos'),
-                             self.get_text(r, 'Length'),
-                             self.get_text(r, 'Surface'),
-                             self.get_text(r, 'ShitekiWord'),
-                             self.get_text(r, 'ShitekiInfo'))
+                      Result(self._get_text(r, 'StartPos'),
+                             self._get_text(r, 'Length'),
+                             self._get_text(r, 'Surface'),
+                             self._get_text(r, 'ShitekiWord'),
+                             self._get_text(r, 'ShitekiInfo'))
                       for r in dom.getElementsByTagName('Result')]
         
         return self.py2json(results) if json else results  

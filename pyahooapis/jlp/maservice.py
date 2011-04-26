@@ -62,14 +62,14 @@ class MAService(Service):
     
     def _get_result(self, results, kind, dom):
         r = dom.getElementsByTagName(kind)[0]
-        return Result(self.get_text(r, 'total_count'),
-                      self.get_text(r, 'filtered_count'),
-                      [Word(self.get_text(w, 'surface'),
-                            self.get_text(w, 'reading'),
-                            self.get_text(w, 'pos'),
-                            self.get_text(w, 'baseform'),
-                            self.get_text(w, 'feature'),
-                            self.get_text(w, 'count'))
+        return Result(self._get_text(r, 'total_count'),
+                      self._get_text(r, 'filtered_count'),
+                      [Word(self._get_text(w, 'surface'),
+                            self._get_text(w, 'reading'),
+                            self._get_text(w, 'pos'),
+                            self._get_text(w, 'baseform'),
+                            self._get_text(w, 'feature'),
+                            self._get_text(w, 'count'))
                        for w in r.getElementsByTagName('word')])
         
     def get_result_set(self,
@@ -105,23 +105,23 @@ class MAService(Service):
         
         params['sentence'] = sentence
         if results is not None:
-            params['results'] = self.binary2param(',', results, RESULTS)
+            params['results'] = self._binary2param(',', results, RESULTS)
         if response is not None:
-            params['response'] = self.binary2param(',', response, RESPONSES)
+            params['response'] = self._binary2param(',', response, RESPONSES)
         if filter is not None:
-            params['filter'] = self.binary2param('|', filter, FILTERS)
+            params['filter'] = self._binary2param('|', filter, FILTERS)
         if ma_response is not None:
-            params['ma_response'] = self.binary2param(',', ma_response, RESPONSES)
+            params['ma_response'] = self._binary2param(',', ma_response, RESPONSES)
         if ma_filter is not None:
-            params['ma_filter'] = self.binary2param('|', ma_filter, FILTERS)
+            params['ma_filter'] = self._binary2param('|', ma_filter, FILTERS)
         if uniq_response is not None:
-            params['uniq_response'] = self.binary2param(',', uniq_response, RESPONSES)
+            params['uniq_response'] = self._binary2param(',', uniq_response, RESPONSES)
         if uniq_filter is not None:
-            params['uniq_filter'] = self.binary2param('|', uniq_response, FILTERS)
+            params['uniq_filter'] = self._binary2param('|', uniq_response, FILTERS)
         if uniq_by_baseform is not False:
             params['uniq_by_baseform'] = str(uniq_by_baseform).lower()
         
-        dom = self.get_dom(params)
+        dom = self._get_dom(params)
         
         resultset = ResultSet()
         

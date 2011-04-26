@@ -19,7 +19,7 @@ class Service(object):
         self.appid = appid
         self.url = url
 
-    def get_text(self, node, tagName):
+    def _get_text(self, node, tagName):
         try:
             return node.getElementsByTagName(tagName)[0].firstChild.nodeValue
         except:
@@ -32,7 +32,7 @@ class Service(object):
         if param is not None:
             params[name] = split.join(map(str, param))
     
-    def get_dom(self, params):
+    def _get_dom(self, params):
         return minidom.parseString(self._remove_newline(self._response(params)))
         
     def _remove_newline(self, xml):
@@ -41,7 +41,7 @@ class Service(object):
     def _binary2list(self, binary, dct):
         return [dct[key] for key in iter(dct) if binary & key]
     
-    def binary2param(self, split, binary, dct):
+    def _binary2param(self, split, binary, dct):
         return split.join(map(str, self._binary2list(binary, dct)))
         
     def py2json(self, obj):

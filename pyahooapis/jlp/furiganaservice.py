@@ -25,18 +25,18 @@ class FuriganaService(Service):
         if grade is not None:
             params['grade'] = grade
         
-        dom = self.get_dom(params)
+        dom = self._get_dom(params)
         
         words = []
         
         for w in dom.getElementsByTagName('Word'):
-            words.append(Word(self.get_text(w, 'Surface'),
-                                  self.get_text(w, 'Furigana'),
-                                  self.get_text(w, 'Roman'),
+            words.append(Word(self._get_text(w, 'Surface'),
+                                  self._get_text(w, 'Furigana'),
+                                  self._get_text(w, 'Roman'),
                                   [
-                                   SubWord(self.get_text(sw, 'Surface'),
-                                           self.get_text(sw, 'Furigana'),
-                                           self.get_text(sw, 'Roman'))
+                                   SubWord(self._get_text(sw, 'Surface'),
+                                           self._get_text(sw, 'Furigana'),
+                                           self._get_text(sw, 'Roman'))
                                    for sw in w.getElementsByTagName('SubWord')
                                   ]))
         

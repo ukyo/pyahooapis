@@ -56,21 +56,21 @@ class JIMService(Service):
         if mode is not None:
             params['mode'] = mode
         if response is not None:
-            params['response'] = self.binary2param(',', response, RESPONSES)
+            params['response'] = self._binary2param(',', response, RESPONSES)
         if dictionary is not None:
-            params['dictionary'] = self.binary2param(',', dictionary, DICTIONARIES)
+            params['dictionary'] = self._binary2param(',', dictionary, DICTIONARIES)
         if results is not None:
             params['results'] = str(results)
         
-        dom = self.get_dom(params)
+        dom = self._get_dom(params)
         
         segmentlist = [
-                       Segment(self.get_text(s, 'SegmentText'),
-                               self.get_text(s, 'Alphanumeric'),
-                               self.get_text(s, 'HalfAlphanumeric'),
-                               self.get_text(s, 'Katakana'),
-                               self.get_text(s, 'HalfKatakana'),
-                               self.get_text(s, 'Hiragana'),
+                       Segment(self._get_text(s, 'SegmentText'),
+                               self._get_text(s, 'Alphanumeric'),
+                               self._get_text(s, 'HalfAlphanumeric'),
+                               self._get_text(s, 'Katakana'),
+                               self._get_text(s, 'HalfKatakana'),
+                               self._get_text(s, 'Hiragana'),
                                [c.firstChild.nodeValue for c in s.getElementsByTagName('Candidate')])
                        for s in dom.getElementsByTagName('Segment')]
         

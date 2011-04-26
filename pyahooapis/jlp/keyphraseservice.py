@@ -47,10 +47,10 @@ class KeyphraseService(Service):
             return self._response(params)
         else:
             params["output"] = "xml"
-            dom = self.get_dom(params)
+            dom = self._get_dom(params)
             resultlist = [
-                          KeyphraseResult(self.get_text(r, "Keyphrase"),
-                                 self.get_text(r, "Score"))
+                          KeyphraseResult(self._get_text(r, "Keyphrase"),
+                                 self._get_text(r, "Score"))
                           for r in dom.getElementsByTagName("Result")
                           ]
             
