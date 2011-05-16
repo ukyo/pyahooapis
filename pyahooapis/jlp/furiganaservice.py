@@ -4,9 +4,7 @@ from pyahooapis.service import Service, BaseObject
 
 
 class FuriganaService(Service):
-    
-    def __init__(self, appid):
-        Service.__init__(self, appid, 'http://jlp.yahooapis.jp/FuriganaService/V1/furigana')
+    url = 'http://jlp.yahooapis.jp/FuriganaService/V1/furigana'
     
     def get_words(self, sentence, grade=None, json=False):
         '''
@@ -56,7 +54,7 @@ class Word(BaseObject):
         self.subwords = subwords
     
     def __str__(self):
-        return self.surface.encode('utf8')
+        return self.encode(self.surface)
 
 
 class SubWord(BaseObject):
@@ -70,5 +68,5 @@ class SubWord(BaseObject):
         self.roman = roman
     
     def __str__(self):
-        return self.surface.encode('utf8')
+        return self.encode(self.surface)
     

@@ -56,9 +56,7 @@ FILTERS = {
     }
 
 class MAService(Service):
-    
-    def __init__(self, appid):
-        Service.__init__(self, appid, 'http://jlp.yahooapis.jp/MAService/V1/parse')
+    url = 'http://jlp.yahooapis.jp/MAService/V1/parse'
     
     def _get_result(self, results, kind, dom):
         r = dom.getElementsByTagName(kind)[0]
@@ -72,17 +70,9 @@ class MAService(Service):
                             self._get_text(w, 'count'))
                        for w in r.getElementsByTagName('word')])
         
-    def get_result_set(self,
-                     sentence,
-                     results=RESULT_MA,
-                     response=None,
-                     filter=None,
-                     ma_response=None,
-                     ma_filter=None,
-                     uniq_response=None,
-                     uniq_filter=None,
-                     uniq_by_baseform=False,
-                     json=False):
+    def get_result_set(self, sentence, results=RESULT_MA, response=None, filter=None,
+                       ma_response=None, ma_filter=None, uniq_response=None,
+                       uniq_filter=None, uniq_by_baseform=False, json=False):
         '''
         詳しくは
         http://developer.yahoo.co.jp/webapi/jlp/ma/v1/parse.html
@@ -133,21 +123,13 @@ class MAService(Service):
         
         return self.py2json(resultset) if json else resultset
     
-    def get_ma_result(self,
-                    sentence,
-                    response=None,
-                    filter=None,
-                    json=False):
+    def get_ma_result(self, sentence, response=None, filter=None, json=False):
         if json:
             return self.get_result_set(sentence=sentence, response=response, filter=filter, json=json)
         else:
             return self.get_result_set(sentence=sentence, response=response, filter=filter, json=json).ma_result
     
-    def get_uniq_result(self,
-                      sentence,
-                      response=None,
-                      filter=None,
-                      json=False):
+    def get_uniq_result(self, sentence, response=None, filter=None, json=False):
         if json:
             return self.get_result_set(sentence=sentence, results=RESULT_UNIQ, response=response, filter=filter, json=json)
         else:
@@ -161,24 +143,15 @@ class ResultSet(BaseObject):
 
 
 class Result(BaseObject):
-    def __init__(self,
-                 total_count,
-                 filtered_count,
-                 words):
+    def __init__(self, total_count, filtered_count, words):
         self.total_count = total_count
         self.filtered_count = filtered_count
         self.words = words
 
 
 class Word(BaseObject):
-    def __init__(self,
-                 surfase=None,
-                 reading=None,
-                 pos=None,
-                 baseform=None,
-                 feature=None,
-                 count=None):
-        self.surfase = surfase
+    def __init__(self, surface=None, reading=None, pos=None, baseform=None, feature=None, count=None):
+        self.surface = surface
         self.reading = reading
         self.pos = pos
         self.baseform = baseform
@@ -186,6 +159,4 @@ class Word(BaseObject):
         self.count = count
     
     def __str__(self):
-        s = self.surfase or self.reading or self.baseform or self.pos or self.feature
-        return s.encode('utf8')
-
+        return self.encode(self.surface or self.reading or self.baseform or self.pos or self.feature)

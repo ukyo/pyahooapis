@@ -7,8 +7,7 @@ JSON_ORIGINAL = "json"
 JSON_LIBRALY = "json_lib"
 
 class KeyphraseService(Service):
-    def __init__(self, appid):
-        Service.__init__(self, appid, "http://jlp.yahooapis.jp/KeyphraseService/V1/extract")
+    url = "http://jlp.yahooapis.jp/KeyphraseService/V1/extract"
     
     def get_results(self, sentence, json=False):
         '''
@@ -62,5 +61,5 @@ class KeyphraseResult(BaseObject):
         self.score = score
 
     def __str__(self):
-        return self.keyphrase.encode('utf8')
+        return self.encode(self.keyphrase)
 

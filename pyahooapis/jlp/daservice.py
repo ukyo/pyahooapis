@@ -19,8 +19,7 @@ class DAService(Service):
     います。 -> None
     '''
     
-    def __init__(self, appid):
-        Service.__init__(self, appid, 'http://jlp.yahooapis.jp/DAService/V1/parse')
+    url = 'http://jlp.yahooapis.jp/DAService/V1/parse'
     
     def get_chunks(self, sentence, json=False):
         '''文節のリストを返す
@@ -69,7 +68,7 @@ class Chunk(BaseObject):
         self.morphems = morphems
     
     def __str__(self):
-        return ''.join(morphem.surface for morphem in self.morphems).encode('utf8')
+        return self.encode(''.join(morphem.surface for morphem in self.morphems))
 
 
 class Morphem(BaseObject):
@@ -91,5 +90,4 @@ class Morphem(BaseObject):
         self.feature = feature
     
     def __str__(self):
-        return self.surface
-
+        return self.encode(self.surface)

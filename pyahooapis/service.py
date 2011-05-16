@@ -1,5 +1,6 @@
 #coding: utf-8
 
+import os
 import re
 import urllib
 import urllib2
@@ -14,11 +15,19 @@ newline_sub = re.compile('\n').sub
 property_match = re.compile('[a-zA-Z].*').match
 
 class Service(object):
+    url = 'http://yahoo.co.jp'
     
-    def __init__(self, appid, url):
+    def __init__(self, appid, encoding=None):
         self.appid = appid
-        self.url = url
+        if os.environ.has_key('PYAHOOAPIS_ENCODING'):
+            if encoding is not None:
+                os.environ['PYAHOOAPIS_ENCODING'] = encoding
+        else:
+            os.environ['PYAHOOAPIS_ENCODING'] = encoding or 'utf8'
 
+    def _encode_to_utf8(self, text):
+        return unicode(text, os.environ['PYAHOOAPIS_ENCODING']).encode('utf8')
+        
     def _get_text(self, node, tagName):
         try:
             return node.getElementsByTagName(tagName)[0].firstChild.nodeValue
@@ -33,6 +42,7 @@ class Service(object):
             params[name] = split.join(map(str, param))
     
     def _get_dom(self, params):
+        params['sentence'] = self._encode_to_utf8(params['sentence'])
         return minidom.parseString(self._remove_newline(self._response(params)))
         
     def _remove_newline(self, xml):
@@ -49,12 +59,13 @@ class Service(object):
             if isinstance(_obj, list):
                 return [_py2json(_o) for _o in _obj]
             elif isinstance(_obj, BaseObject):
-                propertys = (p for p in dir(_obj) if property_match(p))
-                return dict((p, _py2json(getattr(_obj, p))) for p in propertys)
+                properties = (p for p in dir(_obj) if property_match(p))
+                return dict((p, _py2json(getattr(_obj, p))) for p in properties)
             else:
                 return _obj
         return json.dumps(_py2json(obj), indent=False)
                 
 class BaseObject(object):
-    pass
+    def encode(self, text):
+        return text.encode(os.environ['PYAHOOAPIS_ENCODING'])
 

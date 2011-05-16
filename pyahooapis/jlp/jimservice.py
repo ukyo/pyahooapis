@@ -36,18 +36,10 @@ DICTIONARIES = {
     }
 
 class JIMService(Service):
+    url = 'http://jlp.yahooapis.jp/JIMService/V1/conversion'
     
-    def __init__(self, appid):
-        Service.__init__(self, appid, 'http://jlp.yahooapis.jp/JIMService/V1/conversion')
-    
-    def get_segments(self,
-                       sentence,
-                       format=None,
-                       mode=None,
-                       response=None,
-                       dictionary=None,
-                       results=999,
-                       json=False):
+    def get_segments(self, sentence, format=None, mode=None, response=None,
+                     dictionary=None, results=999, json=False):
         
         params = {}
         params['sentence'] = sentence
@@ -78,14 +70,10 @@ class JIMService(Service):
 
 
 class Segment(BaseObject):
-    def __init__(self,
-                 segment_text,
-                 alphanumeric=None,
-                 half_alphanumeric=None,
-                 katakana=None,
-                 half_katakana=None,
-                 hiragana=None,
-                 candidate_list=[]):
+    def __init__(self, segment_text, alphanumeric=None, half_alphanumeric=None,
+                 katakana=None, half_katakana=None, hiragana=None, candidate_list=None):
+        if candidate_list is None:
+            self.candidate_list = []
         
         self.segment_text = segment_text
         self.alphanumeric = alphanumeric
@@ -96,6 +84,6 @@ class Segment(BaseObject):
         self.candidate_list = candidate_list
     
     def __str__(self):
-        return self.segment_text.encode('utf8')
+        return self.encode(self.segment_text)
 
 
